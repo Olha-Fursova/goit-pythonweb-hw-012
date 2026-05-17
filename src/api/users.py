@@ -4,7 +4,7 @@ import shutil
 import os
 import uuid
 
-from src.services.dependencies import get_current_user
+from src.services.dependencies import get_current_user, get_current_admin_user
 from src.services.cloudinary import upload_avatar
 from src.database.db import get_db
 from src.core.limiter import limiter
@@ -27,13 +27,14 @@ async def read_me(
         "email": current_user.email,
         "avatar": current_user.avatar,
         "confirmed": current_user.confirmed,
-        "created_at": current_user.created_at
+        "created_at": current_user.created_at,
+        "role": current_user.role
     }
 
 @router.patch("/avatar")
 async def update_avatar(
     file: UploadFile = File(...),
-    current_user: UserCache = Depends(get_current_user),
+    current_user: UserCache = Depends(get_current_admin_user),
     db: AsyncSession = Depends(get_db)
 ):
     if file.content_type not in ALLOWED_TYPES:

@@ -49,6 +49,7 @@ async def get_current_user(
         "avatar": user.avatar,
         "confirmed": user.confirmed,
         "created_at": str(user.created_at),
+        "role": user.role,
     })
 
     await redis_client.set(
@@ -58,3 +59,13 @@ async def get_current_user(
     )
 
     return user_data
+
+async def get_current_admin_user(
+    current_user: UserCache = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required"
+        )
+    return current_user

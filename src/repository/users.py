@@ -34,7 +34,8 @@ class UserRepository:
             email=body.email,
             hashed_password=get_password_hash(body.password),
             verification_token=verification_token,
-            confirmed=False
+            confirmed=False,
+            role="user"
         )
 
         self.db.add(user)
