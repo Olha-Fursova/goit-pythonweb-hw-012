@@ -7,8 +7,8 @@ services:
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 567234
-      POSTGRES_DB: contacts-db-hw10
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: contacts-db-hw12
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -16,6 +16,11 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+  redis:
+    image: redis:7
+    container_name: redis_cache
+    ports:
+      - "6379:6379"
 
   app:
     build: .
@@ -29,7 +34,7 @@ services:
     env_file:
       - .env
     command: >
-      sh -c "uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+      sh -c "uvicorn main:app --host 0.0.0.0 --port 8000"
 
 volumes:
   postgres_data:

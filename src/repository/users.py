@@ -12,6 +12,11 @@ class UserRepository:
     def __init__(self, session: AsyncSession):
         self.db = session
 
+    async def get_user_by_id(self, user_id: int):
+        stmt = select(User).filter_by(id=user_id)
+        result = await self.db.execute(stmt)
+        return result.scalar_one_or_none()
+
     async def get_user_by_email(self, email: str):
         stmt = select(User).filter_by(email=email)
         result = await self.db.execute(stmt)

@@ -27,6 +27,16 @@ class UserResponse(BaseModel):
     username: str
     email: EmailStr
     avatar: str | None = None
+    role: str
 
     class Config:
         from_attributes = True
+
+class UserCache(BaseModel):
+    id: int
+    username: str
+    email: str
+    avatar: str | None = None
+    confirmed: bool
+    created_at: str | None = None
+    role: str

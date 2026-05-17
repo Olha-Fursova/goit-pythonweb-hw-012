@@ -7,6 +7,9 @@ class UserService:
     def __init__(self, db: AsyncSession):
         self.repository = UserRepository(db)
 
+    async def get_by_id(self, user_id: int):
+        return await self.repository.get_user_by_id(user_id)
+
     async def get_by_email(self, email: str):
         return await self.repository.get_user_by_email(email)
 

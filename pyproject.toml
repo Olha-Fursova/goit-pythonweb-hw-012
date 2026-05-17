@@ -20,7 +20,9 @@ dependencies = [
     "python-multipart (>=0.0.29,<0.0.30)",
     "pydantic[email] (>=2.13.4,<3.0.0)",
     "bcrypt (==4.0.1)",
-    "cloudinary (>=1.44.2,<2.0.0)"
+    "cloudinary (>=1.44.2,<2.0.0)",
+    "sphinx (>=9.1.0,<10.0.0)",
+    "redis (>=7.4.0,<8.0.0)"
 ]
 
 

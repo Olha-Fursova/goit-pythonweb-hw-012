@@ -24,33 +24,16 @@ async def signup(
     service = UserService(db)
 
     email_user = await service.get_by_email(body.email)
-
     if email_user:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Email already exists"
-        )
+        raise HTTPException(status_code=409, detail="Email or username already exists")
 
     username_user = await service.get_by_username(body.username)
-
     if username_user:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Username already exists"
-        )
+        raise HTTPException(status_code=409, detail="Email or username already exists")
 
     user = await service.create_user(body)
 
-    return {
-        "user": {
-            "id": user.id,
-            "username": user.username,
-            "email": user.email,
-            "avatar": user.avatar,
-            "confirmed": user.confirmed
-        },
-        "verification_token": user.verification_token
-    }
+    return user
 
 @router.post("/login")
 async def login(

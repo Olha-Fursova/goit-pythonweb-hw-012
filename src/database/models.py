@@ -48,4 +48,6 @@ class User(Base):
 
     verification_token: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
+    role: Mapped[str] = mapped_column(String, default="user", nullable=False)
+
     contacts = relationship("Contact", back_populates="user")

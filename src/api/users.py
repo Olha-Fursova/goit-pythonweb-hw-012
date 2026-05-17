@@ -1,14 +1,15 @@
-from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
+from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 import shutil
 import os
 import uuid
 
-from src.database.models import User
 from src.services.dependencies import get_current_user
 from src.services.cloudinary import upload_avatar
 from src.database.db import get_db
 from src.core.limiter import limiter
+from src.schemas import UserCache
+from src.services.redis import redis_client
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -16,7 +17,10 @@ ALLOWED_TYPES = ["image/jpeg", "image/png", "image/jpg"]
 
 @router.get("/me")
 @limiter.limit("5/minute")
-async def read_me(current_user: User = Depends(get_current_user)):
+async def read_me(
+    request: Request,
+    current_user: UserCache = Depends(get_current_user)
+):
     return {
         "id": current_user.id,
         "username": current_user.username,
@@ -29,7 +33,7 @@ async def read_me(current_user: User = Depends(get_current_user)):
 @router.patch("/avatar")
 async def update_avatar(
     file: UploadFile = File(...),
-    current_user: User = Depends(get_current_user),
+    current_user: UserCache = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
     if file.content_type not in ALLOWED_TYPES:
@@ -59,6 +63,9 @@ async def update_avatar(
 
     await db.commit()
     await db.refresh(current_user)
+
+    cache_key = f"user:{current_user.id}"
+    await redis_client.delete(cache_key)
 
     return {
         "avatar": avatar_url
