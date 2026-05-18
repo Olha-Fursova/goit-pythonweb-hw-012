@@ -1,6 +1,7 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
+from typing import List, Union
 
 from src.database.db import get_db
 from src.services.auth import decode_access_token
@@ -60,12 +61,18 @@ async def get_current_user(
 
     return user_data
 
-async def get_current_admin_user(
-    current_user: UserCache = Depends(get_current_user)
-):
-    if current_user.role != "admin":
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Admin access required"
-        )
-    return current_user
+def require_role(allowed_roles: Union[str, List[str]]):
+    if isinstance(allowed_roles, str):
+        allowed_roles = [allowed_roles]
+
+    async def role_checker(
+        current_user: UserCache = Depends(get_current_user)
+    ):
+        if current_user.role not in allowed_roles:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Insufficient permissions"
+            )
+        return current_user
+
+    return role_checker
