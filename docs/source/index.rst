@@ -1,17 +1,16 @@
-.. goit-pythonweb-hw-012 documentation master file, created by
-   sphinx-quickstart on Sun May 17 23:32:38 2026.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-goit-pythonweb-hw-012 documentation
-===================================
-
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
-
+Contacts REST API
+=================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+
+   modules
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
 
