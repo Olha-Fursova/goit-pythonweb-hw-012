@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from pydantic import BaseModel, EmailStr
 
 
@@ -38,5 +38,12 @@ class UserCache(BaseModel):
     email: str
     avatar: str | None = None
     confirmed: bool
-    created_at: str | None = None
+    created_at: datetime | None = None
     role: str
+
+class ForgotPasswordModel(BaseModel):
+    email: EmailStr
+
+class ResetPasswordModel(BaseModel):
+    token: str
+    new_password: str

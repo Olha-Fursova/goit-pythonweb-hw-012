@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy import Integer, String, Date, Boolean, ForeignKey
@@ -49,5 +49,9 @@ class User(Base):
     verification_token: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
     role: Mapped[str] = mapped_column(String, default="user", nullable=False)
+    
+    reset_token: Mapped[str | None] = mapped_column(String(255), nullable=True)
+
+    reset_token_expires: Mapped[datetime | None] = mapped_column(nullable=True)
 
     contacts = relationship("Contact", back_populates="user")

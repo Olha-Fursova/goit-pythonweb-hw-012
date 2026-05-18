@@ -15,6 +15,9 @@ class UserService:
 
     async def get_by_username(self, username: str):
         return await self.repository.get_user_by_username(username)
+    
+    async def get_user_by_reset_token(self, token: str):
+        return await self.repository.get_user_by_reset_token(token)
 
     async def create_user(self, body):
         return await self.repository.create_user(body)

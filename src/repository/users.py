@@ -26,6 +26,11 @@ class UserRepository:
         stmt = select(User).filter_by(username=username)
         result = await self.db.execute(stmt)
         return result.scalar_one_or_none()
+    
+    async def get_user_by_reset_token(self, token: str):
+        stmt = select(User).filter_by(reset_token=token)
+        result = await self.db.execute(stmt)
+        return result.scalar_one_or_none()
 
     async def create_user(self, body: UserModel):
         verification_token = str(uuid.uuid4())

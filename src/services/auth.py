@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, UTC
+import uuid
 
 from jose import jwt, JWTError
 from passlib.context import CryptContext
@@ -47,3 +48,9 @@ def decode_access_token(token: str):
 
     except JWTError:
         return None
+    
+def create_reset_token():
+    return str(uuid.uuid4())
+
+def is_reset_token_valid(expires_at: datetime) -> bool:
+    return expires_at is not None and expires_at > datetime.now(UTC)
