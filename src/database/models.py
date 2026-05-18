@@ -1,7 +1,7 @@
 from datetime import date, datetime
 
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy import Integer, String, Date, Boolean, ForeignKey
+from sqlalchemy import Integer, String, Date, Boolean, ForeignKey, DateTime
 
 
 class Base(DeclarativeBase):
@@ -52,6 +52,6 @@ class User(Base):
     
     reset_token: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
-    reset_token_expires: Mapped[datetime | None] = mapped_column(nullable=True)
+    reset_token_expires: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     contacts = relationship("Contact", back_populates="user")
